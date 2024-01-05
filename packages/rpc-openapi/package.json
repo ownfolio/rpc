@@ -13,8 +13,8 @@
     "build": "rimraf ./dist && tsc --declaration --sourceMap"
   },
   "dependencies": {
-    "@anatine/zod-openapi": "^1.12.0",
-    "openapi3-ts": "^3.1.2"
+    "@anatine/zod-openapi": "^2.2.2",
+    "openapi3-ts": "^4.2.1"
   },
   "peerDependencies": {
     "@choffmeister/rpc-core": "*"

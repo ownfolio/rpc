@@ -1,6 +1,6 @@
 import { generateSchema } from '@anatine/zod-openapi'
 import { AnyRpcCall, AnyRpcRouter, isRpcVoid } from '@choffmeister/rpc-core'
-import { OpenAPIObject, PathItemObject, PathsObject } from 'openapi3-ts'
+import { oas31 } from 'openapi3-ts'
 import { z } from 'zod'
 
 export interface RpcOpenApiOpts {
@@ -12,10 +12,10 @@ export interface RpcOpenApiOpts {
 export function createRpcOpenApi<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpcRouter<Ctx>>(
   router: R,
   opts: RpcOpenApiOpts
-): OpenAPIObject {
-  const paths = Object.keys(router).reduce<PathsObject>((paths, name) => {
+): oas31.OpenAPIObject {
+  const paths = Object.keys(router).reduce<oas31.PathsObject>((paths, name) => {
     const call: AnyRpcCall<Ctx> = router[name]
-    const pathObject: PathItemObject = {
+    const pathObject: oas31.PathItemObject = {
       post: {
         ...(!isRpcVoid(call.inputSchema) ? requestBody(call.inputSchema) : requestBodyVoid()),
         responses: {

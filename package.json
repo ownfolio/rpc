@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "npm run --workspaces build",
+    "build": "npm run build --workspaces",
     "lint:fix": "npm run prettier -- --write; npm run eslint -- --fix",
     "lint": "tsc --noEmit && npm run prettier -- --check && npm run eslint",
     "eslint": "eslint . --ext .ts --ext .tsx --ext .js --quiet",

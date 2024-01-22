@@ -5,6 +5,7 @@ import { z } from 'zod'
 
 export interface CreateRpcExpressServerOpts<Ctx> {
   createContext: (req: express.Request, res: express.Response) => Promise<Ctx>
+  requestBodyLimit?: string | number
 }
 
 export function createRpcExpressServer<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpcRouter<Ctx>>(
@@ -15,7 +16,7 @@ export function createRpcExpressServer<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpc
 
   Object.keys(router).forEach(name => {
     const call: AnyRpcCall<Ctx> = router[name]
-    result.post('/' + name, extractInput(call.inputSchema), async (req, res) => {
+    result.post('/' + name, extractInput(call.inputSchema, opts.requestBodyLimit), async (req, res) => {
       try {
         const ctx = await opts.createContext(req, res)
         const output = await call.handler(ctx, req.body)
@@ -32,12 +33,15 @@ export function createRpcExpressServer<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpc
   return result
 }
 
-function extractInput<S extends z.ZodTypeAny>(inputSchema: S): express.Handler {
+function extractInput<S extends z.ZodTypeAny>(
+  inputSchema: S,
+  requestBodyLimit: string | number | undefined
+): express.Handler {
   return (req, res, next) => {
     if (isRpcVoid(inputSchema)) {
       return next()
     }
-    bodyParser.raw({ type: 'application/json' })(req, res, () => {
+    bodyParser.raw({ type: 'application/json', limit: requestBodyLimit })(req, res, () => {
       if (!Buffer.isBuffer(req.body)) {
         return res.status(415).json({ error: 'Unsupported media type' })
       }

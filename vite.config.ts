@@ -9,7 +9,7 @@ export default defineConfig(async () => {
       alias: packages.reduce(
         (acc, dir) => ({
           ...acc,
-          [`@choffmeister/${dir}`]: path.resolve(__dirname, 'packages', dir, 'index.ts'),
+          [`@ownfolio/${dir}`]: path.resolve(__dirname, 'packages', dir, 'index.ts'),
         }),
         {}
       ),

@@ -1,4 +1,4 @@
-import { createRpcCall } from '@choffmeister/rpc-core'
+import { createRpcCall } from '@ownfolio/rpc-core'
 import { expect, it } from 'vitest'
 import { z } from 'zod'
 

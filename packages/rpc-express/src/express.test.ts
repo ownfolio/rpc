@@ -1,4 +1,4 @@
-import { createRpcCall, RpcError } from '@choffmeister/rpc-core'
+import { createRpcCall, RpcError } from '@ownfolio/rpc-core'
 import express from 'express'
 import supertest from 'supertest'
 import { expect, it } from 'vitest'

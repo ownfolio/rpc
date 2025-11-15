@@ -1,5 +1,5 @@
 {
-  "name": "@choffmeister/rpc-browser",
+  "name": "@ownfolio/rpc-browser",
   "version": "0.0.0-dev",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,6 +13,6 @@
     "build": "rimraf ./dist && tsc --declaration --sourceMap"
   },
   "peerDependencies": {
-    "@choffmeister/rpc-core": "*"
+    "@ownfolio/rpc-core": "*"
   }
 }

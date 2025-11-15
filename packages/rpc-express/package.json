@@ -1,5 +1,5 @@
 {
-  "name": "@choffmeister/rpc-express",
+  "name": "@ownfolio/rpc-express",
   "version": "0.0.0-dev",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,6 +16,6 @@
     "express": "^4.18.2"
   },
   "peerDependencies": {
-    "@choffmeister/rpc-core": "*"
+    "@ownfolio/rpc-core": "*"
   }
 }

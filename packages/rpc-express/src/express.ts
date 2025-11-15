@@ -1,4 +1,4 @@
-import { AnyRpcCall, AnyRpcRouter, isRpcError, isRpcVoid, RpcError } from '@choffmeister/rpc-core'
+import { AnyRpcCall, AnyRpcRouter, isRpcError, isRpcVoid, RpcError } from '@ownfolio/rpc-core'
 import bodyParser from 'body-parser'
 import express from 'express'
 import { z } from 'zod'

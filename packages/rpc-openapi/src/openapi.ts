@@ -1,5 +1,5 @@
 import { generateSchema } from '@anatine/zod-openapi'
-import { AnyRpcCall, AnyRpcRouter, isRpcVoid } from '@choffmeister/rpc-core'
+import { AnyRpcCall, AnyRpcRouter, isRpcVoid } from '@ownfolio/rpc-core'
 import { oas31 } from 'openapi3-ts'
 import { z } from 'zod'
 

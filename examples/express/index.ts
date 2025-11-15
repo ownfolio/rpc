@@ -1,4 +1,4 @@
-import { createRpcCall, mergeRpcRouters, RpcError } from '@choffmeister/rpc-core'
+import { createRpcCall, mergeRpcRouters, RpcError } from '@ownfolio/rpc-core'
 import express from 'express'
 import { z } from 'zod'
 

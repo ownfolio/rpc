@@ -1,4 +1,4 @@
-import { AnyRpcRouter, RpcClient } from '@choffmeister/rpc-core'
+import { AnyRpcRouter, RpcClient } from '@ownfolio/rpc-core'
 
 export class RpcBrowserClientError extends Error {
   readonly status: number

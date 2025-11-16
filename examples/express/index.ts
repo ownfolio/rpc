@@ -1,4 +1,9 @@
-import { createRpcCall, mergeRpcRouters, RpcError } from '@ownfolio/rpc-core'
+import {
+  createRpcCallDefinition,
+  createRpcRouterFromDefinitionAndHandler,
+  mergeRpcRouters,
+  RpcError,
+} from '@ownfolio/rpc-core'
 import express from 'express'
 import { z } from 'zod'
 
@@ -10,23 +15,28 @@ interface RpcCtx {
   userId?: string
 }
 
-// define your RPC calls
-const rpcBase = {
-  ping: createRpcCall(z.void(), z.void(), async (_ctx: RpcCtx) => {}),
-  greet: createRpcCall(
-    z.object({ name: z.string() }),
-    z.string(),
-    async (_ctx: RpcCtx, input) => `Hello, ${input.name}!`
-  ),
+// define your RPC calls defs
+const rpcBaseDef = {
+  ping: createRpcCallDefinition(z.void(), z.void()),
+  greet: createRpcCallDefinition(z.object({ name: z.string() }), z.string()),
 }
-const rpcUser = {
-  user: createRpcCall(z.void(), z.object({ id: z.string() }), async (ctx: RpcCtx) => {
+const rpcUserDef = {
+  user: createRpcCallDefinition(z.void(), z.object({ id: z.string() })),
+}
+
+// define your RPC calls
+const rpcBase = createRpcRouterFromDefinitionAndHandler<RpcCtx, typeof rpcBaseDef>(rpcBaseDef, {
+  ping: async _ctx => {},
+  greet: async (_ctx, input) => `Hello, ${input.name}!`,
+})
+const rpcUser = createRpcRouterFromDefinitionAndHandler<RpcCtx, typeof rpcUserDef>(rpcUserDef, {
+  user: async ctx => {
     if (!ctx.userId) throw RpcError.unauthorized()
     return {
       id: ctx.userId,
     }
-  }),
-}
+  },
+})
 const rpc = mergeRpcRouters(rpcBase, rpcUser)
 
 // generate OpenAPI definition

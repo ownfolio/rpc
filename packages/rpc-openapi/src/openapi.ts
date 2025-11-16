@@ -1,7 +1,6 @@
-import { generateSchema } from '@anatine/zod-openapi'
 import { AnyRpcCall, AnyRpcRouter, isRpcVoid } from '@ownfolio/rpc-core'
-import { oas31 } from 'openapi3-ts'
-import { z } from 'zod'
+import * as z from 'zod'
+import { createDocument, ZodOpenApiPathItemObject, ZodOpenApiPathsObject } from 'zod-openapi'
 
 export interface RpcOpenApiOpts {
   infoVersion: string
@@ -12,10 +11,10 @@ export interface RpcOpenApiOpts {
 export function createRpcOpenApi<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpcRouter<Ctx>>(
   router: R,
   opts: RpcOpenApiOpts
-): oas31.OpenAPIObject {
-  const paths = Object.keys(router).reduce<oas31.PathsObject>((paths, name) => {
+) {
+  const paths = Object.keys(router).reduce<ZodOpenApiPathsObject>((paths, name) => {
     const call: AnyRpcCall<Ctx> = router[name]
-    const pathObject: oas31.PathItemObject = {
+    const pathObject: ZodOpenApiPathItemObject = {
       post: {
         ...(!isRpcVoid(call.inputSchema) ? requestBody(call.inputSchema) : requestBodyVoid()),
         responses: {
@@ -33,8 +32,8 @@ export function createRpcOpenApi<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpcRouter
     }
   }, {})
 
-  return {
-    openapi: '3.0.0',
+  return createDocument({
+    openapi: '3.1.0',
     info: {
       version: opts.infoVersion,
       title: opts.infoTitle,
@@ -57,7 +56,7 @@ export function createRpcOpenApi<Ctx, R extends AnyRpcRouter<Ctx> = AnyRpcRouter
         },
       },
     },
-  }
+  })
 }
 
 const requestBody = (inputSchema: z.ZodTypeAny) => {
@@ -65,7 +64,7 @@ const requestBody = (inputSchema: z.ZodTypeAny) => {
     requestBody: {
       content: {
         'application/json': {
-          schema: generateSchema(inputSchema),
+          schema: inputSchema,
         },
       },
     },
@@ -82,7 +81,7 @@ const responseOK = (outputSchema: z.ZodTypeAny) => {
       description: 'OK',
       content: {
         'application/json': {
-          schema: generateSchema(outputSchema),
+          schema: outputSchema,
         },
       },
     },

@@ -1,7 +1,7 @@
 import { AnyRpcCall, AnyRpcRouter, isRpcError, isRpcVoid, RpcError } from '@ownfolio/rpc-core'
 import bodyParser from 'body-parser'
 import express from 'express'
-import { z } from 'zod'
+import * as z from 'zod'
 
 export interface CreateRpcExpressServerOpts<Ctx> {
   createContext: (req: express.Request, res: express.Response) => Promise<Ctx>

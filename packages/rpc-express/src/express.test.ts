@@ -2,7 +2,7 @@ import { createRpcCall, RpcError } from '@ownfolio/rpc-core'
 import express from 'express'
 import supertest from 'supertest'
 import { expect, it } from 'vitest'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { createRpcExpressServer } from './express'
 

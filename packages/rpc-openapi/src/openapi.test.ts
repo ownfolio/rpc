@@ -1,6 +1,6 @@
 import { createRpcCall } from '@ownfolio/rpc-core'
 import { expect, it } from 'vitest'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { createRpcOpenApi } from './openapi'
 
@@ -12,7 +12,7 @@ it('createRpcOpenApi', async () => {
     serverUrl: 'http://localhost/v1',
   })
   expect(openApi).toEqual({
-    openapi: '3.0.0',
+    openapi: '3.1.0',
     info: {
       title: 'test',
       version: '1',

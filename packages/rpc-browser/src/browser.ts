@@ -1,4 +1,4 @@
-import { AnyRpcRouter, RpcClient } from '@ownfolio/rpc-core'
+import { AnyRpcRouterDefinition, RpcClient } from '@ownfolio/rpc-core'
 
 export class RpcBrowserClientError extends Error {
   readonly status: number
@@ -14,15 +14,18 @@ export interface CreateRpcBrowserClientOpts {
   headers?: () => HeadersInit
 }
 
-export function createRpcBrowserClient<R extends AnyRpcRouter>(
+export function createRpcBrowserClient<R extends AnyRpcRouterDefinition>(
   baseUrl: string,
+  routerDefinition: R,
   opts?: CreateRpcBrowserClientOpts
 ): RpcClient<R> {
   const client: RpcClient<any> = {}
   const proxy = new Proxy(client, {
-    get: (_, name) => {
+    get: (_, nameStringOrSymbol) => {
+      const name = nameStringOrSymbol.toString()
+      const definition = routerDefinition[name]
       return async function (input: unknown) {
-        const url = baseUrl + '/' + name.toString()
+        const url = baseUrl + '/' + name
         const res = await fetch(url, {
           method: 'POST',
           cache: 'no-cache',
@@ -35,11 +38,14 @@ export function createRpcBrowserClient<R extends AnyRpcRouter>(
               : {
                   ...(opts?.headers?.() || {}),
                 },
-          body: arguments.length > 0 ? JSON.stringify(input) : undefined,
+          body: arguments.length > 0 ? JSON.stringify(definition.inputSchema.encode(input)) : undefined,
         })
         if (res.status === 200) {
           const output = await res.json()
-          return output
+          if (definition.outputSchema.type === 'void') {
+            return undefined
+          }
+          return definition.outputSchema.decode(output)
         } else if (res.status === 204) {
           return undefined
         } else {

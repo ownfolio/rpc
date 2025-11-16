@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { RpcError } from './core'
 import { isRpcError, isRpcVoid } from './utils'
